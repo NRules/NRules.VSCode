@@ -1,0 +1,54 @@
+{
+  "name": "vscode-nrules-visualizer",
+  "displayName": "vscode-nrules-visualizer",
+  "description": "Debugger visualizer for NRules rules engine",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "vscode-nrules-visualizer.showVisualizer",
+        "title": "Show NRules Visualizer"
+      }
+    ]
+  },
+  "files": [
+    "media"
+  ],
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.10",
+    "@types/node": "20.x",
+    "@types/vscode": "^1.100.0",
+    "@typescript-eslint/eslint-plugin": "^8.31.1",
+    "@typescript-eslint/parser": "^8.31.1",
+    "@vscode/test-cli": "^0.0.10",
+    "@vscode/test-electron": "^2.5.2",
+    "eslint": "^9.25.1",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@types/xml2js": "^0.4.14",
+    "cytoscape": "^3.32.0",
+    "cytoscape-dagre": "^2.5.0",
+    "cytoscape-elk": "^2.3.0",
+    "cytoscape-popper": "^4.0.1",
+    "elkjs": "^0.10.0",
+    "tippy.js": "^6.3.7",
+    "xml2js": "^0.6.2"
+  }
+}
