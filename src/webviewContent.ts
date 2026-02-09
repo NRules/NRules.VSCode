@@ -58,8 +58,6 @@ export class WebviewContentProvider {
             <div id="tooltip"></div>
             <script>
                 window.nrGraphData = ${JSON.stringify(this.getCytoscapeElements(graph))};
-                window.nrGraphStyles = ${JSON.stringify(this.getCytoscapeStyles())};
-                window.nrGraphLayout = ${JSON.stringify(this.getCytoscapeLayout())};
             </script>
             <script src="${scriptPath}"></script>
         `;
@@ -96,69 +94,6 @@ export class WebviewContentProvider {
         }
 
         return elements;
-    }
-
-    private getCytoscapeStyles(): any[] {
-        return [
-            {
-                selector: 'node',
-                style: {
-                    'shape': 'roundrectangle',
-                    'label': 'data(label)',
-                    'text-valign': 'center',
-                    'text-halign': 'center',
-                    'color': '#222',
-                    'background-color': '#f5f5f5',
-                    'border-width': 1,
-                    'border-color': '#888',
-                    'font-family': 'Segoe UI, Arial, sans-serif',
-                    'font-size': '13px',
-                    'padding': '8px 16px',
-                    'width': 'label',
-                    'height': 'label',
-                    'min-width': 40,
-                    'min-height': 32,
-                    'text-wrap': 'wrap',
-                    'text-max-width': 200,
-                    'text-outline-width': 0,
-                    'border-radius': 12
-                }
-            },
-            {
-                selector: 'node[category = "Rule"]',
-                style: {
-                    'background-color': '#a259e6',
-                    'border-color': '#7c3fc4'
-                }
-            },
-            {
-                selector: 'edge',
-                style: {
-                    'width': 2,
-                    'line-color': '#ccc',
-                    'target-arrow-color': '#ccc',
-                    'target-arrow-shape': 'triangle',
-                    'curve-style': 'bezier'
-                }
-            }
-        ];
-    }
-
-    private getCytoscapeLayout(): any {
-        return {
-            name: 'elk',
-            nodeDimensionsIncludeLabels: true,
-            elk: {
-                algorithm: 'layered',
-                'elk.direction': 'DOWN',
-                'elk.spacing.nodeNode': 80,
-                'elk.layered.spacing.nodeNodeBetweenLayers': 100,
-                'elk.edgeRouting': 'ORTHOGONAL'
-            },
-            fit: true,
-            padding: 30,
-            animate: false
-        };
     }
 
     public getHtmlContent(graph: DirectedGraph): string {
