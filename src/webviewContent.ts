@@ -28,49 +28,26 @@ export class WebviewContentProvider {
         );
     }
 
+    private getStylesheetPath(): vscode.Uri {
+        return this.webview.asWebviewUri(
+            vscode.Uri.joinPath(this.extensionUri, 'media', 'webview.css')
+        );
+    }
+
     private getHeadContent(): string {
         const cytoscapePath = this.getCytoscapePath();
         const elkPath = this.getElkPath();
         const cytoscapeElkPath = this.getCytoscapeElkPath();
+        const stylesheetPath = this.getStylesheetPath();
 
         return `
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>NRules Visualizer</title>
+            <link rel="stylesheet" href="${stylesheetPath}">
             <script src="${cytoscapePath}"></script>
             <script src="${elkPath}"></script>
             <script src="${cytoscapeElkPath}"></script>
-            <style>
-                body, html {
-                    height: 100%;
-                    margin: 0;
-                    padding: 0;
-                    overflow: hidden;
-                }
-                #cy {
-                    width: 100%;
-                    height: 100%;
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                }
-                #tooltip {
-                    display: none;
-                    position: absolute;
-                    background: #1e1e1e;
-                    color: #d4d4d4;
-                    border: 1px solid #444;
-                    border-radius: 4px;
-                    padding: 8px 10px;
-                    font-family: 'Consolas', 'Courier New', monospace;
-                    font-size: 12px;
-                    line-height: 1.4;
-                    white-space: pre;
-                    pointer-events: none;
-                    z-index: 1000;
-                    max-width: 400px;
-                }
-            </style>
         `;
     }
 
