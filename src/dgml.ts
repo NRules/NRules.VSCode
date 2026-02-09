@@ -3,6 +3,7 @@ export interface Node {
         Id: string;
         Label?: string;
         Category?: string;
+        [key: string]: string | undefined;
     };
 }
 

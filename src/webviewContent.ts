@@ -54,6 +54,22 @@ export class WebviewContentProvider {
                     top: 0;
                     left: 0;
                 }
+                #tooltip {
+                    display: none;
+                    position: absolute;
+                    background: #1e1e1e;
+                    color: #d4d4d4;
+                    border: 1px solid #444;
+                    border-radius: 4px;
+                    padding: 8px 10px;
+                    font-family: 'Consolas', 'Courier New', monospace;
+                    font-size: 12px;
+                    line-height: 1.4;
+                    white-space: pre;
+                    pointer-events: none;
+                    z-index: 1000;
+                    max-width: 400px;
+                }
             </style>
         `;
     }
@@ -62,6 +78,7 @@ export class WebviewContentProvider {
         const scriptPath = this.getScriptPath();
         return `
             <div id="cy"></div>
+            <div id="tooltip"></div>
             <script>
                 window.nrGraphData = ${JSON.stringify(this.getCytoscapeElements(graph))};
                 window.nrGraphStyles = ${JSON.stringify(this.getCytoscapeStyles())};
@@ -76,11 +93,13 @@ export class WebviewContentProvider {
 
         if (graph.Nodes && graph.Nodes[0] && graph.Nodes[0].Node) {
             graph.Nodes[0].Node.forEach(node => {
+                const { Id, Label, Category, ...rest } = node.$;
                 elements.push({
                     data: {
-                        id: node.$.Id,
-                        label: node.$.Label || node.$.Id,
-                        category: node.$.Category
+                        id: Id,
+                        label: Label || Category || Id,
+                        category: Category,
+                        properties: { Id, Label, Category, ...rest }
                     }
                 });
             });
