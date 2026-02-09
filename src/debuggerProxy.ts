@@ -4,7 +4,7 @@ export class DebuggerProxy {
     public async getContents() {
         const debugSession = this.getDebugSession();
         if (!debugSession) {
-            return "";
+            throw new Error("No active debug session found. Please start debugging your application and pause execution to use the visualizer.");
         }
 
         const threads = await debugSession.customRequest('threads');
@@ -44,7 +44,7 @@ export class DebuggerProxy {
                 { variablesReference: scope.variablesReference });
 
             for (const variable of variablesResponse.variables) {
-                if (variable.type && sessionTypePattern.test(variable.type)) {
+                if (variable.type && sessionTypePattern.test(variable.type) && variable.value !== 'null') {
                     return variable.evaluateName;
                 }
             }
