@@ -17,16 +17,15 @@ export class DebuggerProxy {
                 levels: 1
             });
         const frameId = stackTrace.stackFrames[0].id;
+
         const session = await this.findSessionVariable(debugSession, frameId);
+        var expressions = [
+            `var __schema = ${session}.GetSchema();`,
+            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
+            `__writer.GetContents();`
+        ];
 
-        const reply = await debugSession.customRequest('evaluate',
-            {
-                expression: `new NRules.Diagnostics.Dgml.DgmlWriter(${session}.GetSchema()).GetContents()`,
-                frameId: frameId,
-                context: 'repl'
-            });
-
-        let result = reply.result;
+        let result = await this.evaluateExpressions(debugSession, frameId, expressions);
         result = result.substring(1, result.length - 1);
         result = result.replace(/\\"/g, '"');
         result = result.replace(/\\r/g, '\r');
@@ -56,5 +55,18 @@ export class DebuggerProxy {
 
     private getDebugSession(): vscode.DebugSession | undefined {
         return vscode.debug.activeDebugSession;
+    }
+
+    private async evaluateExpressions(debugSession: vscode.DebugSession, frameId: any, expressions: string[]): Promise<string> {
+        let result: string = "";
+        for (const expression of expressions) {
+            const reply = await debugSession.customRequest('evaluate', {
+                expression: expression,
+                frameId: frameId,
+                context: 'repl'
+            });
+            result = reply.result;
+        }
+        return result;
     }
 }
