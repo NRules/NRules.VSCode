@@ -1,7 +1,8 @@
 import * as vscode from 'vscode';
+import { VisualizerMode } from './visualizerMode';
 
 export class DebuggerProxy {
-    public async getContents() {
+    public async getContents(mode: VisualizerMode) {
         const debugSession = this.getDebugSession();
         if (!debugSession) {
             throw new Error("No active debug session found. Please start debugging your application and pause execution to use the visualizer.");
@@ -19,19 +20,34 @@ export class DebuggerProxy {
         const frameId = stackTrace.stackFrames[0].id;
 
         const session = await this.findSessionVariable(debugSession, frameId);
-        var expressions = [
-            `var __schema = ${session}.GetSchema();`,
-            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
-            `__writer.GetContents();`
-        ];
+        const expressions = mode === 'performance'
+            ? this.getPerformanceExpressions(session)
+            : this.getSchemaExpressions(session);
 
         let result = await this.evaluateExpressions(debugSession, frameId, expressions);
         result = result.substring(1, result.length - 1);
         result = result.replace(/\\"/g, '"');
         result = result.replace(/\\r/g, '\r');
         result = result.replace(/\\n/g, '\n');
-        
+
         return result;
+    }
+
+    private getSchemaExpressions(session: string): string[] {
+        return [
+            `var __schema = ${session}.GetSchema();`,
+            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
+            `__writer.GetContents();`
+        ];
+    }
+
+    private getPerformanceExpressions(session: string): string[] {
+        return [
+            `var __schema = ${session}.GetSchema();`,
+            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
+            `__writer.SetMetricsProvider(${session}.Metrics);`,
+            `__writer.GetContents();`
+        ];
     }
 
     private async findSessionVariable(debugSession: vscode.DebugSession, frameId: number): Promise<string> {

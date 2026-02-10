@@ -112,6 +112,117 @@
         ];
     }
 
+    function getPerformanceCytoscapeStyles() {
+        return [
+            {
+                selector: 'node',
+                style: {
+                    'shape': 'roundrectangle',
+                    'label': 'data(label)',
+                    'text-valign': 'center',
+                    'text-halign': 'center',
+                    'color': '#222',
+                    'background-color': '#e0e0e0',
+                    'border-width': 1,
+                    'border-color': '#888',
+                    'font-family': 'Segoe UI, Arial, sans-serif',
+                    'font-size': '13px',
+                    'padding': '8px 16px',
+                    'width': 'label',
+                    'height': 'label',
+                    'min-width': 40,
+                    'min-height': 32,
+                    'text-wrap': 'wrap',
+                    'text-max-width': 200,
+                    'text-outline-width': 0,
+                    'border-radius': 5
+                }
+            },
+            {
+                selector: 'node[category = "Root"]',
+                style: {
+                    'background-color': '#808080',
+                    'border-color': '#606060',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "Type"]',
+                style: {
+                    'background-color': '#ffa500',
+                    'border-color': '#cc8400',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "Selection"]',
+                style: {
+                    'background-color': '#0000cc',
+                    'border-color': '#000099',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "AlphaMemory"]',
+                style: {
+                    'background-color': '#ff0000',
+                    'border-color': '#cc0000',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "Join"]',
+                style: {
+                    'background-color': '#000080',
+                    'border-color': '#000060',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "BetaMemory"]',
+                style: {
+                    'background-color': '#008000',
+                    'border-color': '#006400',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "Aggregate"]',
+                style: {
+                    'background-color': '#8b0000',
+                    'border-color': '#600000',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'node[category = "Binding"]',
+                style: {
+                    'background-color': '#87ceeb',
+                    'border-color': '#5f9ea0',
+                    'color': '#222'
+                }
+            },
+            {
+                selector: 'node[category = "Rule"]',
+                style: {
+                    'background-color': '#800080',
+                    'border-color': '#600060',
+                    'color': '#fff'
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    'width': 2,
+                    'line-color': '#ccc',
+                    'target-arrow-color': '#ccc',
+                    'target-arrow-shape': 'triangle',
+                    'curve-style': 'bezier'
+                }
+            }
+        ];
+    }
+
     function getCytoscapeLayout() {
         return {
             name: 'elk',
@@ -132,10 +243,14 @@
     function initializeCytoscape() {
         cytoscape.use(cytoscapeElk);
 
+        const styles = window.nrVisualizerMode === 'performance'
+            ? getPerformanceCytoscapeStyles()
+            : getCytoscapeStyles();
+
         const cy = cytoscape({
             container: document.getElementById('cy'),
             elements: window.nrGraphData,
-            style: getCytoscapeStyles(),
+            style: styles,
             layout: getCytoscapeLayout()
         });
 

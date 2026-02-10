@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { DirectedGraph } from './dgml';
+import { VisualizerMode } from './visualizerMode';
 
 export class WebviewContentProvider {
     constructor(private readonly webview: vscode.Webview, private readonly extensionUri: vscode.Uri) {}
@@ -51,13 +52,14 @@ export class WebviewContentProvider {
         `;
     }
 
-    private getBodyContent(graph: DirectedGraph): string {
+    private getBodyContent(graph: DirectedGraph, mode: VisualizerMode): string {
         const scriptPath = this.getScriptPath();
         return `
             <div id="cy"></div>
             <div id="tooltip"></div>
             <script>
                 window.nrGraphData = ${JSON.stringify(this.getCytoscapeElements(graph))};
+                window.nrVisualizerMode = ${JSON.stringify(mode)};
             </script>
             <script src="${scriptPath}"></script>
         `;
@@ -96,7 +98,7 @@ export class WebviewContentProvider {
         return elements;
     }
 
-    public getHtmlContent(graph: DirectedGraph): string {
+    public getHtmlContent(graph: DirectedGraph, mode: VisualizerMode): string {
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -105,7 +107,7 @@ export class WebviewContentProvider {
                 ${this.getHeadContent()}
             </head>
             <body>
-                ${this.getBodyContent(graph)}
+                ${this.getBodyContent(graph, mode)}
             </body>
             </html>
         `;

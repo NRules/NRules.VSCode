@@ -16,6 +16,10 @@
       {
         "command": "vscode-nrules-visualizer.showVisualizer",
         "title": "Show NRules Visualizer"
+      },
+      {
+        "command": "vscode-nrules-visualizer.showPerformanceVisualizer",
+        "title": "Show NRules Performance Visualizer"
       }
     ]
   },
