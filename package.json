@@ -3,6 +3,10 @@
   "displayName": "vscode-nrules-visualizer",
   "description": "Debugger visualizer for NRules rules engine",
   "version": "0.0.1",
+  "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#2D1B69"
+  },
   "engines": {
     "vscode": "^1.100.0"
   },
