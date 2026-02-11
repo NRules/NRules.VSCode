@@ -25,11 +25,11 @@
     "commands": [
       {
         "command": "vscode-nrules-visualizer.showVisualizer",
-        "title": "Show NRules Visualizer"
+        "title": "NRules Visualizer"
       },
       {
         "command": "vscode-nrules-visualizer.showPerformanceVisualizer",
-        "title": "Show NRules Performance Visualizer"
+        "title": "NRules Performance Visualizer"
       }
     ]
   },
