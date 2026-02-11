@@ -34,8 +34,10 @@
     ]
   },
   "files": [
-    "out",
-    "media"
+    "out/*.js",
+    "media",
+    "LICENSE.txt",
+    "README.md"
   ],
   "scripts": {
     "vscode:prepublish": "npm run compile",
