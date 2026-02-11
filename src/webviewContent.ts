@@ -7,19 +7,19 @@ export class WebviewContentProvider {
 
     private getCytoscapePath(): vscode.Uri {
         return this.webview.asWebviewUri(
-            vscode.Uri.joinPath(this.extensionUri, 'node_modules', 'cytoscape', 'dist', 'cytoscape.min.js')
+            vscode.Uri.joinPath(this.extensionUri, 'media', 'vendor', 'cytoscape.min.js')
         );
     }
 
     private getElkPath(): vscode.Uri {
         return this.webview.asWebviewUri(
-            vscode.Uri.joinPath(this.extensionUri, 'node_modules', 'elkjs', 'lib', 'elk.bundled.js')
+            vscode.Uri.joinPath(this.extensionUri, 'media', 'vendor', 'elk.bundled.js')
         );
     }
 
     private getCytoscapeElkPath(): vscode.Uri {
         return this.webview.asWebviewUri(
-            vscode.Uri.joinPath(this.extensionUri, 'node_modules', 'cytoscape-elk', 'dist', 'cytoscape-elk.js')
+            vscode.Uri.joinPath(this.extensionUri, 'media', 'vendor', 'cytoscape-elk.js')
         );
     }
 

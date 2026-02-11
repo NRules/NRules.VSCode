@@ -15,7 +15,8 @@ try {
   rmSync(buildDir, { recursive: true, force: true });
   mkdirSync(buildDir, { recursive: true });
 
-  run("npm run compile");
+  run("npm run compile:types");
+  run("node scripts/esbuild.mjs --production");
   run("npm test");
   run(`npx vsce package --out build/`);
 } catch {

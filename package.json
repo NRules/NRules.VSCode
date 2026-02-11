@@ -34,15 +34,16 @@
     ]
   },
   "files": [
-    "out/*.js",
-    "media",
+    "out/extension.js",
+    "media/**",
     "LICENSE.txt",
     "README.md"
   ],
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "vscode:prepublish": "node scripts/esbuild.mjs --production",
+    "compile": "node scripts/esbuild.mjs",
+    "compile:types": "tsc --noEmit",
+    "watch": "node scripts/esbuild.mjs --watch",
     "lint": "eslint src",
     "test": "npm run test:unit",
     "test:unit": "tsc -p ./ && mocha",
@@ -54,21 +55,17 @@
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
     "@types/vscode": "^1.100.0",
+    "@types/xml2js": "^0.4.14",
     "@typescript-eslint/eslint-plugin": "^8.31.1",
     "@typescript-eslint/parser": "^8.31.1",
     "@vscode/vsce": "^3.7.1",
+    "cytoscape": "^3.32.0",
+    "cytoscape-elk": "^2.3.0",
+    "elkjs": "^0.10.0",
+    "esbuild": "^0.27.3",
     "eslint": "^9.25.1",
     "mocha": "^11.7.5",
-    "typescript": "^5.8.3"
-  },
-  "dependencies": {
-    "@types/xml2js": "^0.4.14",
-    "cytoscape": "^3.32.0",
-    "cytoscape-dagre": "^2.5.0",
-    "cytoscape-elk": "^2.3.0",
-    "cytoscape-popper": "^4.0.1",
-    "elkjs": "^0.10.0",
-    "tippy.js": "^6.3.7",
+    "typescript": "^5.8.3",
     "xml2js": "^0.6.2"
   }
 }
