@@ -2,9 +2,11 @@
 
 A Visual Studio Code extension that visualizes the [NRules](https://github.com/NRules/NRules) Rete network as an interactive graph during debugging. It retrieves DGML graph data from the NRules runtime via the Debug Adapter Protocol (DAP) and renders it using Cytoscape.js with automatic hierarchical layout.
 
+The extension is available at the VS Code marketplace: [NRules Visualizer](https://marketplace.visualstudio.com/items?itemName=nrules.vscode-nrules-visualizer)
+
 ## Features
 
-- **Schema Visualizer** — Displays the structure of the NRules Rete network, showing how rules, conditions, and joins are connected.
+- **Schema Visualizer** — Displays the structure of the NRules Rete network, showing how the nodes are connected.
 - **Performance Visualizer** — Overlays performance metrics from the NRules session onto the network graph.
 - **Interactive Graph** — Pan, zoom, and hover over nodes to see their properties in a tooltip.
 
@@ -28,14 +30,20 @@ A Visual Studio Code extension that visualizes the [NRules](https://github.com/N
 ### Build
 
 ```bash
-npm install
-npm run compile
+npm run compile          # esbuild bundle + vendor copy
+npm run compile:types    # TypeScript type-check only (no emit)
 ```
 
 ### Test
 
 ```bash
 npm test
+```
+
+### Package
+
+```bash
+npm run build            # type-check, bundle, test, produce .vsix in build/
 ```
 
 ### Debug
