@@ -1,6 +1,6 @@
 {
   "name": "vscode-nrules-visualizer",
-  "displayName": "vscode-nrules-visualizer",
+  "displayName": "NRules Visualizer",
   "publisher": "nrules",
   "description": "Debugger visualizer for NRules rules engine",
   "version": "0.0.2",
