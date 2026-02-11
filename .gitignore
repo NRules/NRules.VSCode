@@ -147,3 +147,7 @@ $RECYCLE.BIN/
 
 # Mac folder attributes
 .DS_Store
+
+# Build output
+build/
+*.vsix
