@@ -55,14 +55,13 @@ export class WebviewContentProvider {
         `;
     }
 
-    private getBodyContent(graph: DirectedGraph, mode: VisualizerMode): string {
+    private getBodyContent(graph: DirectedGraph): string {
         const scriptPath = this.getScriptPath();
         return `
             <div id="cy"></div>
             <div id="tooltip"></div>
             <script>
                 window.nrGraphData = ${JSON.stringify(this.getCytoscapeElements(graph))};
-                window.nrVisualizerMode = ${JSON.stringify(mode)};
             </script>
             <script src="${scriptPath}"></script>
         `;
@@ -109,7 +108,7 @@ export class WebviewContentProvider {
         return elements;
     }
 
-    public getHtmlContent(graph: DirectedGraph, mode: VisualizerMode): string {
+    public getHtmlContent(graph: DirectedGraph): string {
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -118,7 +117,7 @@ export class WebviewContentProvider {
                 ${this.getHeadContent()}
             </head>
             <body>
-                ${this.getBodyContent(graph, mode)}
+                ${this.getBodyContent(graph)}
             </body>
             </html>
         `;

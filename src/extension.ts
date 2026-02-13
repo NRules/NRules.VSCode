@@ -44,7 +44,7 @@ function showVisualizer(context: vscode.ExtensionContext, mode: VisualizerMode) 
         const parser = new DgmlParser();
         parser.parse(contents).then(result => {
 
-            panel.webview.html = contentProvider.getHtmlContent(result.DirectedGraph, mode);
+            panel.webview.html = contentProvider.getHtmlContent(result.DirectedGraph);
 
         }).catch(error => {
             panel.webview.html = contentProvider.getErrorContent(error);
