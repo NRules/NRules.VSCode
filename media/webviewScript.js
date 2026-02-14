@@ -56,12 +56,12 @@
             elk: {
                 algorithm: 'layered',
                 'elk.direction': 'DOWN',
-                'elk.spacing.nodeNode': 80,
-                'elk.layered.spacing.nodeNodeBetweenLayers': 100,
-                'elk.edgeRouting': 'ORTHOGONAL'
+                'elk.spacing.nodeNode': 120,
+                'elk.layered.spacing.nodeNodeBetweenLayers': 80,
+                'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX'
             },
             fit: true,
-            padding: 30,
+            padding: 50,
             animate: false
         };
     }
@@ -74,6 +74,23 @@
             elements: window.nrGraphData,
             style: getBaseStyles(),
             layout: getCytoscapeLayout()
+        });
+
+        cy.on('layoutstop', function() {
+            var threshold = 10;
+            cy.edges().forEach(function(edge) {
+                var sx = edge.source().position('x');
+                var tx = edge.target().position('x');
+                var dx = Math.abs(sx - tx);
+                if (dx > threshold) {
+                    var distance = Math.min(Math.max(dx * 0.5, 20), 60);
+                    edge.style({
+                        'curve-style': 'unbundled-bezier',
+                        'control-point-distances': [distance],
+                        'control-point-weights': [0.5]
+                    });
+                }
+            });
         });
 
         applyComputedStyles(cy);
