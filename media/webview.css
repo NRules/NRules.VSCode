@@ -27,5 +27,9 @@ body, html {
     white-space: pre;
     pointer-events: none;
     z-index: 1000;
-    max-width: 400px;
+    max-width: min(1000px, 120vw);
+    max-height: 60vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+    box-sizing: border-box;
 }

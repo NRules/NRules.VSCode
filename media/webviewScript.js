@@ -96,6 +96,7 @@
         applyComputedStyles(cy);
 
         var tooltip = document.getElementById('tooltip');
+        var maxTooltipValueLength = 100;
 
         cy.on('mouseover', 'node', function(event) {
             var node = event.target;
@@ -106,11 +107,21 @@
             var lines = Object.entries(properties)
                 .filter(function(entry) { return entry[0] !== 'Label'; })
                 .filter(function(entry) { return entry[1] !== undefined; })
-                .map(function(entry) { return entry[0] + ' = ' + entry[1]; });
+                .map(function(entry) {
+                    var value = String(entry[1]);
+                    if (value.length > maxTooltipValueLength) {
+                        value = value.slice(0, maxTooltipValueLength - 1) + '\u2026';
+                    }
+                    return entry[0] + ' = ' + value;
+                });
             tooltip.textContent = lines.join('\n');
 
             var pos = event.originalEvent;
             var gap = 5;
+            tooltip.style.left = '0px';
+            tooltip.style.top = '0px';
+            tooltip.style.display = 'block';
+            tooltip.style.visibility = 'hidden';
             var rect = tooltip.getBoundingClientRect();
             var left = pos.clientX + gap;
             var top = pos.clientY + gap;
@@ -130,12 +141,12 @@
 
             tooltip.style.left = left + 'px';
             tooltip.style.top = top + 'px';
-
-            tooltip.style.display = 'block';
+            tooltip.style.visibility = 'visible';
         });
 
         cy.on('mouseout', 'node', function() {
             tooltip.style.display = 'none';
+            tooltip.style.visibility = 'hidden';
         });
 
         vscode.postMessage({ command: 'alert', text: 'NRules Visualizer initialized' });
