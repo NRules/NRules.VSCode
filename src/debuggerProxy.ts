@@ -34,20 +34,30 @@ export class DebuggerProxy {
     }
 
     private getSchemaExpressions(session: string): string[] {
+        const suffix = this.randomSuffix();
+        const schema = `__schema_${suffix}`;
+        const writer = `__writer_${suffix}`;
         return [
-            `var __schema = ${session}.GetSchema();`,
-            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
-            `__writer.GetContents();`
+            `var ${schema} = ${session}.GetSchema();`,
+            `var ${writer} = new NRules.Diagnostics.Dgml.DgmlWriter(${schema});`,
+            `${writer}.GetContents();`
         ];
     }
 
     private getPerformanceExpressions(session: string): string[] {
+        const suffix = this.randomSuffix();
+        const schema = `__schema_${suffix}`;
+        const writer = `__writer_${suffix}`;
         return [
-            `var __schema = ${session}.GetSchema();`,
-            `var __writer = new NRules.Diagnostics.Dgml.DgmlWriter(__schema);`,
-            `__writer.SetMetricsProvider(${session}.Metrics);`,
-            `__writer.GetContents();`
+            `var ${schema} = ${session}.GetSchema();`,
+            `var ${writer} = new NRules.Diagnostics.Dgml.DgmlWriter(${schema});`,
+            `${writer}.SetMetricsProvider(${session}.Metrics);`,
+            `${writer}.GetContents();`
         ];
+    }
+
+    private randomSuffix(): string {
+        return Math.floor(Math.random() * 1000000).toString().padStart(6, '0');
     }
 
     private async findSessionVariable(debugSession: vscode.DebugSession, frameId: number): Promise<string> {
