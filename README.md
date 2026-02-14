@@ -7,8 +7,14 @@ The extension is available at the VS Code marketplace: [NRules Visualizer](https
 ## Features
 
 - **Schema Visualizer** — Displays the structure of the NRules Rete network, showing how the nodes are connected.
-- **Performance Visualizer** — Overlays performance metrics from the NRules session onto the network graph.
-- **Interactive Graph** — Pan, zoom, and hover over nodes to see their properties in a tooltip.
+- **Performance Visualizer** — Overlays performance metrics from the NRules session onto the network graph and dynamically styles the graph to highlight performance bottlenecks.
+- **Interactive Graph** — Pan, zoom, and hover over nodes to see their detailed properties in a tooltip.
+
+Example visualizations:
+
+![NRules Visualizer](media/NRules-Visualizer-Schema.png)
+
+![NRules Visualizer with Tooltip](media/NRules-Visualizer-Tooltip.png)
 
 ## Prerequisites
 
