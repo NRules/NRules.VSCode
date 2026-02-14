@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { DirectedGraph } from './dgml';
 import { DgmlStyleResolver } from './dgmlStyleResolver';
-import { VisualizerMode } from './visualizerMode';
 
 export class WebviewContentProvider {
+    private static readonly maxNodeLabelLength = 80;
     private readonly styleResolver = new DgmlStyleResolver();
 
     constructor(private readonly webview: vscode.Webview, private readonly extensionUri: vscode.Uri) {}
@@ -74,9 +74,10 @@ export class WebviewContentProvider {
         if (graph.Nodes && graph.Nodes[0] && graph.Nodes[0].Node) {
             graph.Nodes[0].Node.forEach(node => {
                 const { Id, Label, Category, ...rest } = node.$;
+                const label = this.truncateLabel(Label || Category || Id);
                 const data: any = {
                     id: Id,
-                    label: Label || Category || Id,
+                    label,
                     category: Category,
                     properties: { Id, Label, Category, ...rest }
                 };
@@ -106,6 +107,13 @@ export class WebviewContentProvider {
         }
 
         return elements;
+    }
+
+    private truncateLabel(label: string): string {
+        if (label.length <= WebviewContentProvider.maxNodeLabelLength) {
+            return label;
+        }
+        return label.slice(0, WebviewContentProvider.maxNodeLabelLength - 1) + '\u2026';
     }
 
     public getHtmlContent(graph: DirectedGraph): string {

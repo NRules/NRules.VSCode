@@ -78,6 +78,20 @@ describe('WebviewContentProvider', () => {
 
             assert.strictEqual(elements.length, 0);
         });
+
+        it('should truncate labels longer than 80 characters', () => {
+            const longLabel = 'L'.repeat(90);
+            const graph = makeGraph(
+                [{ $: { Id: 'N1', Label: longLabel } }],
+                []
+            );
+
+            const elements = (provider as any).getCytoscapeElements(graph);
+            const label = elements[0].data.label;
+
+            assert.strictEqual(label.length, 80);
+            assert.strictEqual(label.endsWith('…'), true);
+        });
     });
 
     describe('getErrorContent', () => {
