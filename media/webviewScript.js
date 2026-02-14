@@ -56,8 +56,8 @@
             elk: {
                 algorithm: 'layered',
                 'elk.direction': 'DOWN',
-                'elk.spacing.nodeNode': 120,
-                'elk.layered.spacing.nodeNodeBetweenLayers': 80,
+                'elk.spacing.nodeNode': 250,
+                'elk.layered.spacing.nodeNodeBetweenLayers': 150,
                 'elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX'
             },
             fit: true,
