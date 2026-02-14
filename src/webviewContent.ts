@@ -1,8 +1,11 @@
 import * as vscode from 'vscode';
 import { DirectedGraph } from './dgml';
+import { DgmlStyleResolver } from './dgmlStyleResolver';
 import { VisualizerMode } from './visualizerMode';
 
 export class WebviewContentProvider {
+    private readonly styleResolver = new DgmlStyleResolver();
+
     constructor(private readonly webview: vscode.Webview, private readonly extensionUri: vscode.Uri) {}
 
     private getCytoscapePath(): vscode.Uri {
@@ -52,14 +55,13 @@ export class WebviewContentProvider {
         `;
     }
 
-    private getBodyContent(graph: DirectedGraph, mode: VisualizerMode): string {
+    private getBodyContent(graph: DirectedGraph): string {
         const scriptPath = this.getScriptPath();
         return `
             <div id="cy"></div>
             <div id="tooltip"></div>
             <script>
                 window.nrGraphData = ${JSON.stringify(this.getCytoscapeElements(graph))};
-                window.nrVisualizerMode = ${JSON.stringify(mode)};
             </script>
             <script src="${scriptPath}"></script>
         `;
@@ -67,38 +69,46 @@ export class WebviewContentProvider {
 
     private getCytoscapeElements(graph: DirectedGraph): any[] {
         const elements: any[] = [];
+        const { nodeStyles, linkStyles } = this.styleResolver.resolve(graph);
 
         if (graph.Nodes && graph.Nodes[0] && graph.Nodes[0].Node) {
             graph.Nodes[0].Node.forEach(node => {
                 const { Id, Label, Category, ...rest } = node.$;
-                elements.push({
-                    data: {
-                        id: Id,
-                        label: Label || Category || Id,
-                        category: Category,
-                        properties: { Id, Label, Category, ...rest }
-                    }
-                });
+                const data: any = {
+                    id: Id,
+                    label: Label || Category || Id,
+                    category: Category,
+                    properties: { Id, Label, Category, ...rest }
+                };
+                const computed = nodeStyles.get(Id);
+                if (computed) {
+                    data.computedStyle = computed;
+                }
+                elements.push({ data });
             });
         }
 
         if (graph.Links && graph.Links[0] && graph.Links[0].Link) {
             graph.Links[0].Link.forEach(link => {
-                elements.push({
-                    data: {
-                        id: `${link.$.Source}-${link.$.Target}`,
-                        source: link.$.Source,
-                        target: link.$.Target,
-                        category: link.$.Category
-                    }
-                });
+                const linkId = `${link.$.Source}-${link.$.Target}`;
+                const data: any = {
+                    id: linkId,
+                    source: link.$.Source,
+                    target: link.$.Target,
+                    category: link.$.Category
+                };
+                const computed = linkStyles.get(linkId);
+                if (computed) {
+                    data.computedStyle = computed;
+                }
+                elements.push({ data });
             });
         }
 
         return elements;
     }
 
-    public getHtmlContent(graph: DirectedGraph, mode: VisualizerMode): string {
+    public getHtmlContent(graph: DirectedGraph): string {
         return `
             <!DOCTYPE html>
             <html lang="en">
@@ -107,7 +117,7 @@ export class WebviewContentProvider {
                 ${this.getHeadContent()}
             </head>
             <body>
-                ${this.getBodyContent(graph, mode)}
+                ${this.getBodyContent(graph)}
             </body>
             </html>
         `;

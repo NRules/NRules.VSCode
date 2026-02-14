@@ -92,7 +92,7 @@ describe('WebviewContentProvider', () => {
     describe('getHtmlContent', () => {
         it('should include the graph title in the HTML', () => {
             const graph = makeGraph([], [], 'My Graph');
-            const html = provider.getHtmlContent(graph, 'schema');
+            const html = provider.getHtmlContent(graph);
 
             assert.ok(html.includes('My Graph'));
         });

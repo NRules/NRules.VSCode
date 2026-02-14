@@ -51,4 +51,51 @@ describe('DgmlParser', () => {
 
         await assert.rejects(() => parser.parse(xml));
     });
+
+    it('should parse DGML with Styles, Categories, and Properties sections', async () => {
+        const xml = `<?xml version="1.0" encoding="utf-8"?>
+            <DirectedGraph Title="Styled Graph">
+                <Nodes>
+                    <Node Id="N1" Label="Node 1" Category="Rule" />
+                </Nodes>
+                <Links>
+                    <Link Source="N1" Target="N1" />
+                </Links>
+                <Categories>
+                    <Category Id="Rule" />
+                    <Category Id="Type" />
+                </Categories>
+                <Styles>
+                    <Style TargetType="Node">
+                        <Condition Expression="HasCategory('Rule')" />
+                        <Setter Property="Background" Value="#800080" />
+                    </Style>
+                    <Style TargetType="Link">
+                        <Setter Property="StrokeThickness" Expression="Math.Max(1,2)" />
+                    </Style>
+                </Styles>
+                <Properties>
+                    <Property Id="PerfCount" DataType="System.Int32" />
+                </Properties>
+            </DirectedGraph>`;
+
+        const result = await parser.parse(xml);
+        const graph = result.DirectedGraph;
+
+        assert.strictEqual(graph.Categories![0].Category.length, 2);
+        assert.strictEqual(graph.Categories![0].Category[0].$.Id, 'Rule');
+        assert.strictEqual(graph.Categories![0].Category[1].$.Id, 'Type');
+
+        assert.strictEqual(graph.Styles![0].Style.length, 2);
+        assert.strictEqual(graph.Styles![0].Style[0].$.TargetType, 'Node');
+        assert.strictEqual(graph.Styles![0].Style[0].Condition![0].$.Expression, "HasCategory('Rule')");
+        assert.strictEqual(graph.Styles![0].Style[0].Setter![0].$.Property, 'Background');
+        assert.strictEqual(graph.Styles![0].Style[0].Setter![0].$.Value, '#800080');
+        assert.strictEqual(graph.Styles![0].Style[1].$.TargetType, 'Link');
+        assert.strictEqual(graph.Styles![0].Style[1].Setter![0].$.Expression, 'Math.Max(1,2)');
+
+        assert.strictEqual(graph.Properties![0].Property.length, 1);
+        assert.strictEqual(graph.Properties![0].Property[0].$.Id, 'PerfCount');
+        assert.strictEqual(graph.Properties![0].Property[0].$.DataType, 'System.Int32');
+    });
 });
