@@ -9,8 +9,11 @@ VS Code debugger visualizer extension for the NRules rules engine. During a debu
 ## Build & Development Commands
 
 ```bash
-npm run compile      # Compile TypeScript to out/
-npm test             # Run VS Code extension tests (requires vscode-test)
+npm run compile      # Bundle src/extension.ts to out/extension.js via esbuild
+npm run compile:types # Type-check only (tsc --noEmit)
+npm run lint         # Lint src with ESLint
+npm test             # Compile with tsc and run the mocha unit tests
+npm run build        # Full release build: types, bundle, tests, vsce package -> build/
 ```
 
 To debug the extension: use the "Run Extension" launch configuration in VS Code, which opens an Extension Development Host.
@@ -33,7 +36,9 @@ The extension follows a pipeline: **Debugger → Parser → Visualizer**
 
 - **cytoscape + cytoscape-elk + elkjs** — Graph visualization and automatic hierarchical layout
 - **xml2js** — XML parsing for DGML data from the debugger
-- **@vscode/test-cli + @vscode/test-electron** — VS Code extension test infrastructure
+- **esbuild** — Bundles the extension and copies webview vendor files (`scripts/esbuild.mjs`)
+- **mocha** — Unit test runner, configured via `.mocharc.yml` against compiled output in `out/test/`
+- **@vscode/vsce** — Packages and publishes the extension
 
 ## TypeScript Configuration
 
